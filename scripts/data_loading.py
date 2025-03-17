@@ -1,6 +1,6 @@
 import pandas as pd
 
-def load_stock_price(file_paths):
+def load_historical_datasets(file_paths):
     """ Loads historical datasets from provided file paths
     and returns a dictionary of DataFrames.
 
@@ -16,7 +16,7 @@ def load_stock_price(file_paths):
     return datasets
 
 
-def load_raw_analyst(file_path):
+def load_raw_analyst_ratings(file_path):
     """
     Load stock data from a csv file
 
@@ -26,4 +26,4 @@ def load_raw_analyst(file_path):
     Returns:
         pd.DataFrame: loaded data
     """
-    return pd.read_csv(file_path, parse_dates=["Date"])
+    return pd.read_csv(file_path)
