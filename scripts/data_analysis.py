@@ -1,5 +1,13 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
+import talib
+import pynance as pn
+
+def calculate_movig_avg(data, window):
+
+
+    return data.rolling(window=window).mean()
+    
 
 def analyze_text_lengths(data, column):
     """
@@ -36,3 +44,54 @@ def extract_top_keywords(data, column, top_n=10):
         "keyword": feature_names,
         "score": tfidf_scores
     }).sort_values(by="score", ascending=False)
+
+def calculate_rsi(data, period):
+    """
+    Calculate the Relative Strength Index (RSI) for a given DataFrame.
+    :param data: DataFrame with a 'Close' price column.
+    :param period: Time period for RSI calculation (default 14).
+    :return: DataFrame with an additional 'RSI' column.
+    """
+    data['RSI'] = talib.RSI(data['Close'], timeperiod=period)
+    return data
+
+def calculate_MACD(data):
+    """
+    Calculate the MACD for a given DataFrame.
+    :param data: DataFrame with a 'Close' price column.
+    :return: DataFrame with an additional 'MACD', 'MACD_Signal', and 'MACD_Hist' column.
+    """  
+    macd, macd_signal, macd_hist = talib.MACD(data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
+    data['MACD'] = macd
+    data['MACD_Signal'] = macd_signal
+    data['MACD_Hist'] = macd_hist
+    
+    return data
+
+
+def compute_indicators(data, sma_window=50, ema_window=20):
+    """
+    Compute SMA and EMA using TA-Lib and add them to the DataFrame.
+    
+    Parameters:
+    - data: DataFrame containing the column 'Close'
+    - sma_window: int, period for Simple Moving Average
+    - ema_window: int, period for Exponential Moving Average
+    
+    Returns:
+    - DataFrame with added SMA and EMA columns
+    """
+    data = data.copy()
+    #data = {'Close': [100, 102, 105, 110, 108, 107, 105, 106, 109, 111, 115, 116, 118]}
+    # Check required columns
+    if 'Close' not in data.columns:
+        raise ValueError("Missing required column: 'Close'")
+    
+    # Calculate Simple Moving Average (SMA)
+    data['SMA'] = talib.SMA(data['Close'], timeperiod=sma_window)
+    
+    # Calculate Exponential Moving Average (EMA)
+    data['EMA'] = talib.EMA(data['Close'], timeperiod=ema_window)
+    
+    return data
+
