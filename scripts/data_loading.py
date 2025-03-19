@@ -27,3 +27,16 @@ def load_raw_analyst_ratings(file_path):
         pd.DataFrame: loaded data
     """
     return pd.read_csv(file_path)
+
+
+def stock_data(file_path):
+    """
+    Load stock data from a csv file
+
+    Args:
+        file_path (str): path to the csv file
+
+    Returns:
+        pd.DataFrame: loaded data
+    """
+    return pd.read_csv(file_path, parse_dates=["Date"])
