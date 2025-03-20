@@ -156,3 +156,24 @@ def plot_indicators(data,stock_name, sma_window=50, ema_window=20):
 
 
 
+def plot_correlation(merged_df):
+    """
+    Plot scatter plot and regression line between daily stock returns and sentiment scores.
+    
+    Args:
+        merged_df (pd.DataFrame): DataFrame containing 'Daily_Return' and 'Sentiment_Score' columns.
+    """
+    plt.figure(figsize=(10, 6))
+    sns.regplot(
+        x='Avg_Sentiment_Score', 
+        y='Daily_Return', 
+        data=merged_df, 
+        scatter_kws={'alpha':0.6}, 
+        line_kws={'color':'red'},
+        ci=None
+    )
+    plt.title('Correlation Between Daily Sentiment Scores and Stock Returns', fontsize=14)
+    plt.xlabel('Average Daily Sentiment Score', fontsize=12)
+    plt.ylabel('Daily Stock Return (%)', fontsize=12)
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.show()

@@ -30,3 +30,17 @@ def convert_dates(datasets):
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'], errors='coerce')
     return datasets
+
+def merge_data(file_paths):
+    # Load and merge all stock dataframes into one
+     stock_dataframes = []
+     for file in file_paths:
+         ticker = file.split('/')[-1].split('_')[0]  # Extract ticker from file name
+         df = pd.read_csv(file)
+         df['Ticker'] = ticker  # Add ticker column
+         stock_dataframes.append(df)
+
+         merged_stock_df = pd.concat(stock_dataframes, ignore_index=True)
+         merged_stock_df.to_csv('../data/processed/merged_stock_data.csv', index=False)
+        
+     return merged_stock_df
